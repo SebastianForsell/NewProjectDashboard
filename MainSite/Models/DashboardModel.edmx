@@ -1,0 +1,439 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="testDashboardModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Kommentarer">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="AntalTimmar" Type="int" Nullable="false" />
+          <Property Name="Kommentar" Type="nvarchar(max)" />
+          <Property Name="DateCreated" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Kunder">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Namn" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="OrgNummer" Type="int" Nullable="false" />
+          <Property Name="Fakturainfo" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="DokumentLink" Type="nvarchar" MaxLength="400" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Projekt">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KundID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="TotalTid" Type="int" Nullable="false" />
+          <Property Name="Deadline" Type="date" Nullable="false" />
+          <Property Name="T" Type="int" Nullable="false" />
+          <Property Name="UTF" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProjektItems">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProjektID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="UtveckladeTimmar" Type="int" Nullable="false" />
+          <Property Name="TotalTid" Type="int" Nullable="false" />
+          <Property Name="Deadline" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SystemUsers">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProjektID" Type="int" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SaltedPassword" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="IsAdmin" Type="bit" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Target_Rate" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Kommentar__ItemI__2B3F6F97">
+          <End Role="ProjektItems" Type="Self.ProjektItems" Multiplicity="1" />
+          <End Role="Kommentarer" Type="Self.Kommentarer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProjektItems">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Kommentarer">
+              <PropertyRef Name="ItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Kommentar__UserI__2C3393D0">
+          <End Role="SystemUsers" Type="Self.SystemUsers" Multiplicity="1" />
+          <End Role="Kommentarer" Type="Self.Kommentarer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemUsers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Kommentarer">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Projekt__KundID__1367E606">
+          <End Role="Kunder" Type="Self.Kunder" Multiplicity="1" />
+          <End Role="Projekt" Type="Self.Projekt" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kunder">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Projekt">
+              <PropertyRef Name="KundID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProjektIt__Proje__267ABA7A">
+          <End Role="Projekt" Type="Self.Projekt" Multiplicity="1" />
+          <End Role="ProjektItems" Type="Self.ProjektItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Projekt">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ProjektItems">
+              <PropertyRef Name="ProjektID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProjektIt__UserI__276EDEB3">
+          <End Role="SystemUsers" Type="Self.SystemUsers" Multiplicity="1" />
+          <End Role="ProjektItems" Type="Self.ProjektItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemUsers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ProjektItems">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SystemUse__Proje__21B6055D">
+          <End Role="Projekt" Type="Self.Projekt" Multiplicity="1" />
+          <End Role="SystemUsers" Type="Self.SystemUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Projekt">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SystemUsers">
+              <PropertyRef Name="ProjektID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="testDashboardModelStoreContainer">
+          <EntitySet Name="Kommentarer" EntityType="Self.Kommentarer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Kunder" EntityType="Self.Kunder" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Projekt" EntityType="Self.Projekt" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProjektItems" EntityType="Self.ProjektItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SystemUsers" EntityType="Self.SystemUsers" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Kommentar__ItemI__2B3F6F97" Association="Self.FK__Kommentar__ItemI__2B3F6F97">
+            <End Role="ProjektItems" EntitySet="ProjektItems" />
+            <End Role="Kommentarer" EntitySet="Kommentarer" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Kommentar__UserI__2C3393D0" Association="Self.FK__Kommentar__UserI__2C3393D0">
+            <End Role="SystemUsers" EntitySet="SystemUsers" />
+            <End Role="Kommentarer" EntitySet="Kommentarer" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Projekt__KundID__1367E606" Association="Self.FK__Projekt__KundID__1367E606">
+            <End Role="Kunder" EntitySet="Kunder" />
+            <End Role="Projekt" EntitySet="Projekt" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProjektIt__Proje__267ABA7A" Association="Self.FK__ProjektIt__Proje__267ABA7A">
+            <End Role="Projekt" EntitySet="Projekt" />
+            <End Role="ProjektItems" EntitySet="ProjektItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProjektIt__UserI__276EDEB3" Association="Self.FK__ProjektIt__UserI__276EDEB3">
+            <End Role="SystemUsers" EntitySet="SystemUsers" />
+            <End Role="ProjektItems" EntitySet="ProjektItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SystemUse__Proje__21B6055D" Association="Self.FK__SystemUse__Proje__21B6055D">
+            <End Role="Projekt" EntitySet="Projekt" />
+            <End Role="SystemUsers" EntitySet="SystemUsers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="testDashboardModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Kommentarer">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="AntalTimmar" Type="Int32" Nullable="false" />
+          <Property Name="Kommentar" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="ProjektItem" Relationship="Self.FK__Kommentar__ItemI__2B3F6F97" FromRole="Kommentarer" ToRole="ProjektItems" />
+          <NavigationProperty Name="SystemUser" Relationship="Self.FK__Kommentar__UserI__2C3393D0" FromRole="Kommentarer" ToRole="SystemUsers" />
+        </EntityType>
+        <EntityType Name="Kunder">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Namn" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="OrgNummer" Type="Int32" Nullable="false" />
+          <Property Name="Fakturainfo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DokumentLink" Type="String" MaxLength="400" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Projekts" Relationship="Self.FK__Projekt__KundID__1367E606" FromRole="Kunder" ToRole="Projekt" />
+        </EntityType>
+        <EntityType Name="Projekt">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KundID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TotalTid" Type="Int32" Nullable="false" />
+          <Property Name="Deadline" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="T" Type="Int32" Nullable="false" />
+          <Property Name="UTF" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Kunder" Relationship="Self.FK__Projekt__KundID__1367E606" FromRole="Projekt" ToRole="Kunder" />
+          <NavigationProperty Name="ProjektItems" Relationship="Self.FK__ProjektIt__Proje__267ABA7A" FromRole="Projekt" ToRole="ProjektItems" />
+          <NavigationProperty Name="SystemUsers" Relationship="Self.FK__SystemUse__Proje__21B6055D" FromRole="Projekt" ToRole="SystemUsers" />
+        </EntityType>
+        <EntityType Name="ProjektItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProjektID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="UtveckladeTimmar" Type="Int32" Nullable="false" />
+          <Property Name="TotalTid" Type="Int32" Nullable="false" />
+          <Property Name="Deadline" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Kommentarers" Relationship="Self.FK__Kommentar__ItemI__2B3F6F97" FromRole="ProjektItems" ToRole="Kommentarer" />
+          <NavigationProperty Name="Projekt" Relationship="Self.FK__ProjektIt__Proje__267ABA7A" FromRole="ProjektItems" ToRole="Projekt" />
+          <NavigationProperty Name="SystemUser" Relationship="Self.FK__ProjektIt__UserI__276EDEB3" FromRole="ProjektItems" ToRole="SystemUsers" />
+        </EntityType>
+        <EntityType Name="SystemUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProjektID" Type="Int32" Nullable="false" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SaltedPassword" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Target_Rate" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Kommentarers" Relationship="Self.FK__Kommentar__UserI__2C3393D0" FromRole="SystemUsers" ToRole="Kommentarer" />
+          <NavigationProperty Name="Projekt" Relationship="Self.FK__SystemUse__Proje__21B6055D" FromRole="SystemUsers" ToRole="Projekt" />
+          <NavigationProperty Name="ProjektItems" Relationship="Self.FK__ProjektIt__UserI__276EDEB3" FromRole="SystemUsers" ToRole="ProjektItems" />
+        </EntityType>
+        <Association Name="FK__Kommentar__ItemI__2B3F6F97">
+          <End Role="ProjektItems" Type="Self.ProjektItem" Multiplicity="1" />
+          <End Role="Kommentarer" Type="Self.Kommentarer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProjektItems">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Kommentarer">
+              <PropertyRef Name="ItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Kommentar__UserI__2C3393D0">
+          <End Role="SystemUsers" Type="Self.SystemUser" Multiplicity="1" />
+          <End Role="Kommentarer" Type="Self.Kommentarer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemUsers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Kommentarer">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Projekt__KundID__1367E606">
+          <End Role="Kunder" Type="Self.Kunder" Multiplicity="1" />
+          <End Role="Projekt" Type="Self.Projekt" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kunder">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Projekt">
+              <PropertyRef Name="KundID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProjektIt__Proje__267ABA7A">
+          <End Role="Projekt" Type="Self.Projekt" Multiplicity="1" />
+          <End Role="ProjektItems" Type="Self.ProjektItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Projekt">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ProjektItems">
+              <PropertyRef Name="ProjektID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SystemUse__Proje__21B6055D">
+          <End Role="Projekt" Type="Self.Projekt" Multiplicity="1" />
+          <End Role="SystemUsers" Type="Self.SystemUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Projekt">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SystemUsers">
+              <PropertyRef Name="ProjektID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProjektIt__UserI__276EDEB3">
+          <End Role="SystemUsers" Type="Self.SystemUser" Multiplicity="1" />
+          <End Role="ProjektItems" Type="Self.ProjektItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemUsers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ProjektItems">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="testDashboardContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Kommentarers" EntityType="Self.Kommentarer" />
+          <EntitySet Name="Kunders" EntityType="Self.Kunder" />
+          <EntitySet Name="Projekts" EntityType="Self.Projekt" />
+          <EntitySet Name="ProjektItems" EntityType="Self.ProjektItem" />
+          <EntitySet Name="SystemUsers" EntityType="Self.SystemUser" />
+          <AssociationSet Name="FK__Kommentar__ItemI__2B3F6F97" Association="Self.FK__Kommentar__ItemI__2B3F6F97">
+            <End Role="ProjektItems" EntitySet="ProjektItems" />
+            <End Role="Kommentarer" EntitySet="Kommentarers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Kommentar__UserI__2C3393D0" Association="Self.FK__Kommentar__UserI__2C3393D0">
+            <End Role="SystemUsers" EntitySet="SystemUsers" />
+            <End Role="Kommentarer" EntitySet="Kommentarers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Projekt__KundID__1367E606" Association="Self.FK__Projekt__KundID__1367E606">
+            <End Role="Kunder" EntitySet="Kunders" />
+            <End Role="Projekt" EntitySet="Projekts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProjektIt__Proje__267ABA7A" Association="Self.FK__ProjektIt__Proje__267ABA7A">
+            <End Role="Projekt" EntitySet="Projekts" />
+            <End Role="ProjektItems" EntitySet="ProjektItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SystemUse__Proje__21B6055D" Association="Self.FK__SystemUse__Proje__21B6055D">
+            <End Role="Projekt" EntitySet="Projekts" />
+            <End Role="SystemUsers" EntitySet="SystemUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProjektIt__UserI__276EDEB3" Association="Self.FK__ProjektIt__UserI__276EDEB3">
+            <End Role="SystemUsers" EntitySet="SystemUsers" />
+            <End Role="ProjektItems" EntitySet="ProjektItems" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="testDashboardModelStoreContainer" CdmEntityContainer="testDashboardContext">
+          <EntitySetMapping Name="Kommentarers">
+            <EntityTypeMapping TypeName="testDashboardModel.Kommentarer">
+              <MappingFragment StoreEntitySet="Kommentarer">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="AntalTimmar" ColumnName="AntalTimmar" />
+                <ScalarProperty Name="Kommentar" ColumnName="Kommentar" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Kunders">
+            <EntityTypeMapping TypeName="testDashboardModel.Kunder">
+              <MappingFragment StoreEntitySet="Kunder">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Namn" ColumnName="Namn" />
+                <ScalarProperty Name="OrgNummer" ColumnName="OrgNummer" />
+                <ScalarProperty Name="Fakturainfo" ColumnName="Fakturainfo" />
+                <ScalarProperty Name="DokumentLink" ColumnName="DokumentLink" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Projekts">
+            <EntityTypeMapping TypeName="testDashboardModel.Projekt">
+              <MappingFragment StoreEntitySet="Projekt">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="KundID" ColumnName="KundID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="TotalTid" ColumnName="TotalTid" />
+                <ScalarProperty Name="Deadline" ColumnName="Deadline" />
+                <ScalarProperty Name="T" ColumnName="T" />
+                <ScalarProperty Name="UTF" ColumnName="UTF" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProjektItems">
+            <EntityTypeMapping TypeName="testDashboardModel.ProjektItem">
+              <MappingFragment StoreEntitySet="ProjektItems">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ProjektID" ColumnName="ProjektID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UtveckladeTimmar" ColumnName="UtveckladeTimmar" />
+                <ScalarProperty Name="TotalTid" ColumnName="TotalTid" />
+                <ScalarProperty Name="Deadline" ColumnName="Deadline" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SystemUsers">
+            <EntityTypeMapping TypeName="testDashboardModel.SystemUser">
+              <MappingFragment StoreEntitySet="SystemUsers">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ProjektID" ColumnName="ProjektID" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="SaltedPassword" ColumnName="SaltedPassword" />
+                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Target_Rate" ColumnName="Target_Rate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

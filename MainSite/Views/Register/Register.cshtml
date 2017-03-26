@@ -1,0 +1,32 @@
+﻿@model MainSite.Models.SystemUser
+@{
+    ViewBag.Title = "Register";
+}
+<h2>Registrera en användare</h2>
+@using (Html.BeginForm("Register", "Register", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <label>Username</label>
+        @Html.TextBoxFor(model => model.Username, new { @class = "form-control" }) @ViewBag.UsernameError<br />
+        <label>Password</label>
+
+            @Html.PasswordFor(model => model.SaltedPassword, new { @class = "form-control" }) @ViewBag.PasswordError<br />
+        <label>Email</label>
+        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" }) @ViewBag.EmailError<br />
+
+        <label>Är du administrator?</label>
+        Ja @Html.RadioButtonFor(model => model.IsAdmin, 1, new { @class = "form-control" })
+        Nej @Html.RadioButtonFor(model => model.IsAdmin, 0, new { @class = "form-control" }) @ViewBag.AdminError<br />
+        <input type="submit" name="RegisterMe" value="Register now!" /><br />
+
+        @ViewBag.Success @ViewBag.UserExist
+    </div>
+            }
+
+@*@if (true)
+    {
+        <script type="text/javascript">
+
+        </script>
+    }*@

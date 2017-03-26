@@ -1,0 +1,96 @@
+﻿body {
+}
+progress{
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    height: 30px;
+    width: 400px;
+}
+.progressBarLow::-moz-progress-bar{
+    background-color: #f00;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.55) inset;
+}
+.progressBarMedium::-moz-progress-bar{
+    background-color: #f5ff00;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.55) inset;
+}
+.progressBarHigh::-moz-progress-bar{
+    background-color: #00b517;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.55) inset;
+}
+.progressBarFull::-moz-progress-bar{
+    background-color: #fcc900;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.55) inset;
+}
+
+.progressBarLow::-webkit-progress-value{
+    background-color: #f00;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.55) inset;
+}
+.progressBarMedium::-webkit-progress-value{
+    background-color: #f5ff00;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.55) inset;
+}
+.progressBarHigh::-webkit-progress-value{
+    background-color: #00b517;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.55) inset;
+}
+.progressBarFull::-webkit-progress-value{
+    background-color: #fcc900;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.55) inset;
+}
+progress[value]::-webkit-progress-bar{
+    background-color: #eee;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.55) inset;
+}
+.progressBarLow{
+    color: #f00;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.55) inset;
+}
+.progressBarMedium{
+    color: #f5ff00;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.55) inset;
+}
+.progressBarHigh{
+    color: #00b517;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.55) inset;
+}
+.progressBarFull{
+    background-color: #fcc900;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.55) inset;
+}
+.circleMe {
+    border: 2px, solid, #000000;
+    height: 50px;
+    width: 50px;
+    -moz-border-radius: 40px;
+    -webkit-border-radius: 40px;
+    border-radius: 40px;
+    background-color: #00b517;
+    color: white;
+    text-shadow: 2px 2px 2px #6d6d6d;
+    text-align: center;
+    padding-top: 2.5%;
+    font-size: large;
+}
+.projectDateColourClass1{
+    color: #f00;
+    font-weight: bold;
+}
+.projectDateColourClass2{
+    color: #00b517;
+    font-weight: bold;
+}

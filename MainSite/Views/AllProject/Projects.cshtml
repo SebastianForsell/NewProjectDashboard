@@ -1,0 +1,170 @@
+﻿<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<link href="~/Styles/AllProjectsStyle.css" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/jquery-3.1.1.js")"></script>
+@*<script src="@Url.Content("~/Scripts/jquery-3.1.1.intellisense.js")"></script>*@
+<script src="@Url.Content("~/Scripts/DataTables/jquery.dataTables.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery-ui-1.12.1.js")"></script>
+<script src="@Url.Content("~/Scripts/AllProjectsScript.js")"></script>
+@model MainSite.Models.KundProjectModel
+@{
+    ViewBag.Title = "Projects";
+}
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h1 class="panel-title">Projekt</h1>
+            </div>
+            <div class="panel-body">
+                <div id="itemTableView">
+
+                </div>
+                <div id="updatedProjectTable">
+
+                </div>
+                @{
+                    <button id="createProjectButton"> Skapa nytt projekt </button>
+
+                    <table id="projectsTable" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <td>Name</td>
+                                <td>Status</td>
+                                <td>Utveckling</td>
+                                <td>Total tid</td>
+                                <td>Deadline</td>
+                                <td>T/UTF</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Projekts)
+                            {
+                                <tr>
+                                    <td>@item.Name</td>
+                                    <td>@Html.CheckBox(item.Status, true, new { @disabled = "disabled" }) @item.Status</td>
+                                    <td>
+                                        @{
+                                            string progressClass;
+                                            int[] totalWorkedArray = item.ProjektItems.Where(x => item.ID == x.ProjektID).Select(y => y.Kommentarers.Sum(z => z.AntalTimmar)).ToArray();
+                                            double totalWorked = totalWorkedArray.Sum();
+                                            double totalHour = item.TotalTid;
+                                            if ((totalWorked / totalHour) <= 0.25)
+                                            {
+                                                progressClass = "progressBarLow";
+                                            }
+                                            else if ((totalWorked / totalHour) > 0.25 && (totalWorked / totalHour) <= 0.75)
+                                            {
+                                                progressClass = "progressBarMedium";
+                                            }
+                                            else if ((totalWorked / totalHour) > 0.75 && (totalWorked / totalHour) < 0.99)
+                                            {
+                                                progressClass = "progressBarHigh";
+                                            }
+                                            else
+                                            {
+                                                progressClass = "progressBarFull";
+                                            }
+                                            <progress id="@item.ID" value="@totalWorked" max="@totalHour" class="@progressClass"> Code here?  </progress><br />
+                                            /*
+                                                post model ID with ajax to partialview controller
+                                                to show project items
+                                            */
+                                        }
+                                        @{
+                                            var userNames = item.SystemUsers.Where(user => item.ID == user.ProjektID).Select(x => x.Username).ToList();
+                                            foreach (var user in userNames)
+                                            {
+                                                char[] name = @user.ToUpper().Take(2).ToArray();
+                                                <div class="circleMe">@name[0]@name[1]</div>
+                                                /*
+                                                post model user ID with ajax to view controller
+                                                to show user page
+                                                */
+
+                                            }
+                                        }
+                                    </td>
+                                    <td>@item.TotalTid</td>
+                                    @{
+                                        string dayClass = "";
+
+                                        if (item.Deadline.Subtract(DateTime.Today.Date).Days == 1)
+                                        {
+                                            ViewBag.DeadlineLeft = "Dag kvar";
+                                        }
+                                        else
+                                        {
+                                            ViewBag.DeadlineLeft = "Dagar kvar";
+                                        }
+                                        if (item.Deadline.Subtract(DateTime.Today.Date).Days <= 7 && item.Deadline.Subtract(DateTime.Today.Date).Days >= 0)
+                                        {
+
+                                            dayClass = "projectDateColourClass1";
+                                        }
+                                        else if (item.Deadline.Subtract(DateTime.Today.Date).Days < 0)
+                                        {
+                                            if ((totalWorked / totalHour) <= 0.99)
+                                            {
+                                                dayClass = "projectDateColourClass1";
+                                            }
+                                            else
+                                            {
+                                                dayClass = "projectDateColourClass2";
+                                            }
+                                        }
+                                    }
+                                    <td class="@dayClass">
+                                        @item.Deadline.Subtract(DateTime.Today.Date).Days @{
+
+                                            @ViewBag.DeadlineLeft
+                                        }
+                                    </td>
+                                    <td>@item.T / @item.UTF</td>
+                                </tr>
+                                            }
+                        </tbody>
+                    </table>
+                }
+                <div id="createProjectWindow" class="table-responsive" title="Lägg till ett projekt" style="display: none">
+                    <form>
+                        <label for="companyDropDown">Kund</label><br />
+                        <select id="companyDropDown">
+                            @foreach (var item in Model.Kunders)
+                            {
+                                <option value="@item.ID">@item.Namn</option>
+                            }
+                        </select><br />
+                        <label for="projectName">Projekt name</label><br />
+                        <input type="text" id="projectName" /><br /><br />
+
+                        <label for="totalTime">Totala tiden</label><br />
+                        <input type="number" id="totalTime" min="0" /><br /><br />
+
+                        <label for="tInput">T</label><br />
+                        <input type="number" id="tInput" min="0" /><br /><br />
+
+                        <label for="utfInput">UTF</label><br />
+                        <input type="number" id="utfInput" min="0" /><br /><br />
+
+                        <label for="deadlineInput">Deadline</label><br />
+                        <input type="date" id="deadlineInput" /><br /><br />
+                    </form>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    var partialURL = {
+        url: '@Url.Action("ItemTable", "AllProject")',
+        updateItemUrl: '@Url.Action("ItemTableAddComment", "AllProject")',
+        updateProjectsUrl: '@Url.Action("addProject", "AllProject")',
+        updateProjectItemsUrl: '@Url.Action("addItem", "AllProject")'
+    }
+</script>
